@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
-namespace backend.Controllers;
+namespace backend;
 
 [ApiController]
 [Route("/api/[controller]")]
@@ -8,24 +9,29 @@ public class GroupsController : ControllerBase
 {
     private string[] Title { set; get; } = new[] { "First group", "Second group", "Last group" };
     private readonly GroupContext _context;
-    public GroupsController(GroupContext context)
+    private readonly IMapper _mapper;
+
+    public GroupsController(GroupContext context, IMapper mapper)
     {
         this._context = context;
+        this._mapper = mapper;
     }
 
     [HttpGet]
-    public IEnumerable<Group> Get()
+    public IEnumerable<GroupDT> Get()
     {
-        return _context.Groups.ToList<Group>();
-        //
-        // return Enumerable.Range(0, 3).Select(index => new Group(this.Title[index])).ToArray();
+        var groups = this._context.Groups.ToList();
+        var dtos = this._mapper.Map<List<GroupDT>>(groups);
+        return dtos;
     }
 
     [HttpPost]
-    public ActionResult<Group> Post(Group group)
+    public ActionResult<GroupDT> Post(PostGroupDT dto)
     {
+        var group = this._mapper.Map<Group>(dto);
         this._context.Groups.Add(group);
         this._context.SaveChanges();
-        return CreatedAtAction(nameof(Get), new { title = group.Title }, group);
+        var result = this._mapper.Map<GroupDT>(group);
+        return CreatedAtAction(nameof(Get), new { id = group.Id }, result);
     }
 }

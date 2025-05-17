@@ -17,10 +17,11 @@ class Program
         });
 
         builder.Services.AddControllers();
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi();
+        builder.Services.AddOpenApi(); // Configure OpenApi
         builder.Services.AddDbContext<GroupContext>(opt =>
-        opt.UseInMemoryDatabase("Groups"));
+        opt.UseInMemoryDatabase("Groups")); // Configure InMemory database
+
+        builder.Services.AddAutoMapper(typeof(MappingProfile)); // Configure AutoMapper
 
         var app = builder.Build();
 
@@ -29,7 +30,7 @@ class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
+            app.MapOpenApi(); // Configure swagger
             app.UseSwaggerUi(options =>
             {
                 options.DocumentPath = "/openapi/v1.json";

@@ -68,12 +68,19 @@ function Groups() {
         </Grid>
       ))}
     </Grid>
-    <AddGroup open={isAddGroupDialogOpen} setOpen={setIsAddGroupDialogOpen} />
+    <AddGroup
+      open={isAddGroupDialogOpen}
+      setOpen={setIsAddGroupDialogOpen}
+      groups={groups}
+      setGroups={setGroups}
+    />
   </Container>);
 }
 
 interface AddGroupDialogProps {
   open: boolean;
+  groups: Group[];
+  setGroups: (groups: Group[]) => void;
   setOpen: (value: boolean) => void;
 }
 
@@ -87,7 +94,8 @@ function AddGroup(props: AddGroupDialogProps) {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
     try {
-      await axios.post('/api/groups', { "title": title });
+      const response = await axios.post('/api/groups', { "title": title });
+      props.groups.push(response.data)
       setTitle('');
     } catch (error) {
       console.error("failed to add group");

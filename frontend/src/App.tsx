@@ -1,6 +1,6 @@
 import { Box, CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Groups from "./Groups";
+import GroupsView from "./GroupsView";
 
 function App() {
   return (<Box>
@@ -8,7 +8,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/"
-          element={<Groups />} />
+          element={<GroupsView />} />
       </Routes>
     </BrowserRouter>
   </Box >);

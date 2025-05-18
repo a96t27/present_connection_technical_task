@@ -2,6 +2,7 @@ import axios from "axios";
 import { Container, Typography, Card, CardContent, Grid, Dialog, DialogTitle, Button, Stack, DialogContent, TextField, DialogActions } from "@mui/material";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 interface Group {
   id: number;
@@ -16,6 +17,7 @@ interface GroupCardProps {
 }
 
 function GroupCard(props: GroupCardProps) {
+  const navigate = useNavigate()
   return <Card variant="outlined" sx={{ height: '100%' }}>
     <CardContent>
       <Typography variant="h2" fontSize={20}>
@@ -24,6 +26,9 @@ function GroupCard(props: GroupCardProps) {
       <Typography>
         Total debt: {props.group.debt}
       </Typography>
+      <Button onClick={()=> navigate(`/group/${props.group.id}`)}>
+        Open
+        </Button>
     </CardContent>
   </Card>
 }

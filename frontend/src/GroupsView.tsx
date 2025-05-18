@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 interface Group {
   id: number;
   title: string;
+  debt: number;
 }
 
 
@@ -21,13 +22,13 @@ function GroupCard(props: GroupCardProps) {
         {props.group.title}
       </Typography>
       <Typography>
-        Text
+        Total debt: {props.group.debt}
       </Typography>
     </CardContent>
   </Card>
 }
 
-function Groups() {
+function GroupsView() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isAddGroupDialogOpen, setIsAddGroupDialogOpen] = useState<boolean>(false);
@@ -131,4 +132,4 @@ function AddGroup(props: AddGroupDialogProps) {
     </Dialog>);
 }
 
-export default Groups
+export default GroupsView

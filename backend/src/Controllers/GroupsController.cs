@@ -41,6 +41,7 @@ public class GroupsController : ControllerBase
     {
         var group = this._context.Groups
             .Include(g => g.Members)
+            .Include(g => g.Transactions)
             .FirstOrDefault(g => g.Id == id);
 
         if (group == null)

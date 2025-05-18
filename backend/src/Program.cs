@@ -1,5 +1,6 @@
 namespace backend;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 class Program
 {
@@ -22,6 +23,12 @@ class Program
         opt.UseInMemoryDatabase("Groups")); // Configure InMemory database
 
         builder.Services.AddAutoMapper(typeof(MappingProfile)); // Configure AutoMapper
+
+        builder.Services.AddControllers()
+            .AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
         var app = builder.Build();
 

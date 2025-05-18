@@ -1,3 +1,4 @@
+import { CloseFullscreenSharp } from '@mui/icons-material';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import { Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack, TextField, Typography } from "@mui/material";
 import axios from "axios";
@@ -10,10 +11,20 @@ interface Member {
   debt: number;
 }
 
+interface Transaction {
+  id: number;
+  groupId: number;
+  title: string;
+  amount: number;
+  paidByMember: number;
+  splitType: "Equal" | "Percent" | "Dynamic";
+}
+
 interface GroupFull {
   id: number;
   title: string;
   members: Member[];
+  transactions: Transaction[];
 }
 
 interface MemberCardProps {
@@ -25,6 +36,24 @@ interface AddMemberDialogProps {
   members: Member[];
   setOpen: (value: boolean) => void;
   groupId: number;
+}
+
+interface TransactionCardProps {
+  title: string;
+  amount: number;
+}
+
+
+function TransactionCard(props: TransactionCardProps) {
+  return <Card variant="outlined" sx={{margin: 1}}>
+    <CardContent>
+      <Stack direction='row'>
+        <Typography>
+          {`${props.title} (${props.amount} Eur)`}
+        </Typography>
+      </Stack>
+    </CardContent>
+  </Card>
 }
 
 function AddMember(props: AddMemberDialogProps) {
@@ -96,8 +125,9 @@ function GroupView() {
   const { groupId } = useParams();
   const [group, setGroup] = useState<GroupFull | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [addMemberOpen, setAddMenberOpen] = useState<boolean>(false)
-  const [members, setMembers] = useState<Member[]>([])
+  const [addMemberOpen, setAddMenberOpen] = useState<boolean>(false);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -106,6 +136,7 @@ function GroupView() {
         setGroup(response.data);
         if (group) {
           setMembers(group.members)
+          setTransactions(group.transactions)
         }
       }).catch((err) => {
         console.error(err)
@@ -113,7 +144,7 @@ function GroupView() {
       });
   })
   if (error) {
-    return <div>Error loading group members: {error}</div>;
+    return <div>Error loading group: {error}</div>;
   }
 
 
@@ -132,6 +163,7 @@ function GroupView() {
           sx={{ margin: 1, flexGrow: 1 }}>Add Member</Button>
         <Button
           variant="outlined"
+          onClick={()=>navigate("newtransaction")}
           sx={{ margin: 1, flexGrow: 1 }}>New Transaction</Button>
       </Box>
     </Stack>
@@ -148,6 +180,14 @@ function GroupView() {
     <Typography variant="h2" fontSize={28} marginTop={2}>
       Transactions
     </Typography>
+    <Stack>
+      {transactions.map((t)=>(
+        <TransactionCard
+          title={t.title}
+          amount={t.amount}
+          />
+      ))}
+    </Stack>
     <AddMember open={addMemberOpen} members={members} setOpen={setAddMenberOpen} groupId={Number(groupId)} />
   </Container>);
 }

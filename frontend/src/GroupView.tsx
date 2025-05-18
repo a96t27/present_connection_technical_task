@@ -54,14 +54,14 @@ function AddMember(props: AddMemberDialogProps) {
       }
     }}>
       <DialogTitle>
-        Add group
+        Add member
       </DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           required
           id="name"
-          label="Group title"
+          label="Member's name"
           margin="dense"
           fullWidth
           onChange={(e) => setName(e.target.value)}
@@ -87,7 +87,7 @@ function MemberCard(props: MemberCardProps) {
       <Typography>
         Owes: {props.member.debt}
       </Typography>
-    <Button>Settle</Button>
+      <Button>Settle</Button>
     </CardContent>
   </Card>
 }

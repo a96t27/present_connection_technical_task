@@ -1,4 +1,4 @@
-import { Box, Button, Container, Stack, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, Stack, Step, StepContent, StepLabel, Stepper, TextField, Typography, type SelectChangeEvent } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -24,7 +24,7 @@ function NewTransactionView() {
   const [paidBy, setPaidBy] = useState<number>();
 
   function handleNext() {
-    if (activeStep == steps.length-1) {
+    if (activeStep >= steps.length - 1) {
       navigate(-1)
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -60,7 +60,20 @@ function NewTransactionView() {
       ))}
     </Stepper>
     <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-
+    <FormControl fullWidth>
+      <InputLabel variant="standard">
+        Who paid?
+      </InputLabel>
+      <Select variant="standard"
+        onChange={(e: SelectChangeEvent)=>setPaidBy(Number(e.target.value))}
+        >
+        {members.map((m) => (
+          <MenuItem value={m.id}>
+            {m.name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
 
     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
       <Button
